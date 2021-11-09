@@ -43,12 +43,11 @@
 
 # Hardening
 , graphene-hardened-malloc
-# crashes with intel driver
-, useHardenedMalloc ? false
+# Whether to use graphene-hardened-malloc
+, useHardenedMalloc ? true
 
-# Whether to disable multiprocess support to work around crashing tabs
-# TODO: fix the underlying problem instead of this terrible work-around
-, disableContentSandbox ? true
+# Whether to disable multiprocess support
+, disableContentSandbox ? false
 
 # Extra preferences
 , extraPrefs ? ""
@@ -88,7 +87,7 @@ let
   fteLibPath = makeLibraryPath [ stdenv.cc.cc gmp ];
 
   # Upstream source
-  version = "10.5.6";
+  version = "11.0";
 
   lang = "en-US";
 
@@ -98,7 +97,7 @@ let
         "https://dist.torproject.org/torbrowser/${version}/tor-browser-linux64-${version}_${lang}.tar.xz"
         "https://tor.eff.org/dist/torbrowser/${version}/tor-browser-linux64-${version}_${lang}.tar.xz"
       ];
-      sha256 = "1hxjixriah08c65nngjdp1blbji1vlnhqkphp8f96hy34hk4dpiw";
+      sha256 = "0938a9yjfg9qa9rv5acrmbgqq11mc8j0pvl1n64jrdz29crk6sj2";
     };
 
     i686-linux = fetchurl {
@@ -106,7 +105,7 @@ let
         "https://dist.torproject.org/torbrowser/${version}/tor-browser-linux32-${version}_${lang}.tar.xz"
         "https://tor.eff.org/dist/torbrowser/${version}/tor-browser-linux32-${version}_${lang}.tar.xz"
       ];
-      sha256 = "018kwwbbn02drvdj0bjkcyhsnbx97wnmd3lxkrx0kc9dw1s4r418";
+      sha256 = "07v1ca66a69jl238qdq81mw654yffrcyq685y4rvv8xvx11fnzzp";
     };
   };
 in
@@ -414,7 +413,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.torproject.org/";
     changelog = "https://gitweb.torproject.org/builders/tor-browser-build.git/plain/projects/tor-browser/Bundle-Data/Docs/ChangeLog.txt?h=maint-${version}";
     platforms = attrNames srcs;
-    maintainers = with maintainers; [ offline matejc thoughtpolice joachifm hax404 cap KarlJoad ];
+    maintainers = with maintainers; [ offline matejc thoughtpolice joachifm hax404 KarlJoad ];
     mainProgram = "tor-browser";
     hydraPlatforms = [];
     # MPL2.0+, GPL+, &c.  While it's not entirely clear whether
