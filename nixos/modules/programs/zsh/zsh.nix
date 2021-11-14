@@ -280,21 +280,8 @@ in
 
     environment.etc.zinputrc.source = ./zinputrc;
 
-    environment.systemPackages =
-      let
-        completions =
-          if lib.versionAtLeast (lib.getVersion config.nix.package) "2.4pre"
-          then
-            pkgs.nix-zsh-completions.overrideAttrs
-              (_: {
-                postInstall = ''
-                  rm $out/share/zsh/site-functions/_nix
-                '';
-              })
-          else pkgs.nix-zsh-completions;
-      in
-      [ pkgs.zsh ]
-      ++ optional cfg.enableCompletion completions;
+    environment.systemPackages = [ pkgs.zsh ]
+      ++ optional cfg.enableCompletion pkgs.nix-zsh-completions;
 
     environment.pathsToLink = optional cfg.enableCompletion "/share/zsh";
 
