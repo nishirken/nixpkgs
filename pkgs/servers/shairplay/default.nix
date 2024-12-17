@@ -4,7 +4,7 @@
   fetchFromGitHub,
   autoreconfHook,
   pkg-config,
-  avahi,
+  avahi-compat,
   libao,
 }:
 
@@ -25,18 +25,20 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    avahi
+    avahi-compat
     libao
   ];
+
+  propagatedBuildInputs = [ avahi-compat ];
 
   enableParallelBuilding = true;
 
   # the build will fail without complaining about a reference to /tmp
-  preFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
-    patchelf \
-      --set-rpath "${lib.makeLibraryPath buildInputs}:$out/lib" \
-      $out/bin/shairplay
-  '';
+  #preFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
+  #  patchelf \
+  #    --set-rpath "${lib.makeLibraryPath buildInputs}:$out/lib" \
+  #    $out/bin/shairplay
+  #'';
 
   meta = with lib; {
     inherit (src.meta) homepage;
